@@ -16,10 +16,12 @@ def get_pac_value(api_url):
         is_sleeping = ("PAC" not in data["Body"]["Data"])
 
         # Extract the current "PAC" value if it exists
-        if not is_sleeping:
+        if not is_sleeping and "PAC" in data["Body"]["Data"]:
             pac_value = data["Body"]["Data"]["PAC"]["Value"]
+        elif "DAY_ENERGY" in data["Body"]["Data"]:    # Check if DAY_ENERGY Key exists
+                pac_value = data["Body"]["Data"]["DAY_ENERGY"]["Value"]  # Use "DAY_ENERGY" if "PAC" key doesn't exist (sleeping at night)
         else:
-            pac_value = data["Body"]["Data"]["DAY_ENERGY"]["Value"]  # Use "DAY_ENERGY" if "PAC" key doesn't exist (sleeping at night)
+            pac_value = "0"
 ##      Some debug constants
 #        is_sleeping = 1
 #        return None, True
@@ -56,7 +58,7 @@ while True:
     if len(pac_history) > history_size:
         pac_history = pac_history[-history_size:]
 
-    if pac_value is not None and not is_sleeping:
+    if pac_value > 0 and not is_sleeping:
         # Scale the PAC values to fit within the y-axis height
         scaled_values = [int(value / max_y_value * y_axis_height) for value in pac_history]
 
