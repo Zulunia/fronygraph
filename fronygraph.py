@@ -18,8 +18,10 @@ def get_pac_value(api_url):
         # Extract the current "PAC" value if it exists
         if not is_sleeping:
             pac_value = data["Body"]["Data"]["PAC"]["Value"]
+        elif "DAY_ENERGY" in data["Body"]["Data"]:    # Check if DAY_ENERGY Key exists
+                pac_value = data["Body"]["Data"]["DAY_ENERGY"]["Value"]  # Use "DAY_ENERGY" if "PAC" key doesn't exist (sleeping at night)
         else:
-            pac_value = data["Body"]["Data"]["DAY_ENERGY"]["Value"]  # Use "DAY_ENERGY" if "PAC" key doesn't exist (sleeping at night)
+            pac_value = "0"
 ##      Some debug constants
 #        is_sleeping = 1
 #        return None, True
