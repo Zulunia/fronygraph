@@ -16,7 +16,7 @@ def get_pac_value(api_url):
         is_sleeping = ("PAC" not in data["Body"]["Data"])
 
         # Extract the current "PAC" value if it exists
-        if not is_sleeping and "PAC" in data["Body"]["Data"]:
+        if not is_sleeping:
             pac_value = data["Body"]["Data"]["PAC"]["Value"]
         elif "DAY_ENERGY" in data["Body"]["Data"]:    # Check if DAY_ENERGY Key exists
                 pac_value = data["Body"]["Data"]["DAY_ENERGY"]["Value"]  # Use "DAY_ENERGY" if "PAC" key doesn't exist (sleeping at night)
@@ -44,7 +44,7 @@ pac_history = []
 figlet = Figlet(font="banner")
 
 # Define the sleep duration between updates (in seconds)
-update_interval = 60
+update_interval = 5
 
 # Start an infinite loop to update and plot the data
 while True:
@@ -58,7 +58,7 @@ while True:
     if len(pac_history) > history_size:
         pac_history = pac_history[-history_size:]
 
-    if pac_value > 0 and not is_sleeping:
+    if int(pac_value) is not None and not is_sleeping:
         # Scale the PAC values to fit within the y-axis height
         scaled_values = [int(value / max_y_value * y_axis_height) for value in pac_history]
 
@@ -78,8 +78,8 @@ while True:
 
         # Output the value of "DAY_ENERGY" under the "STAND-BY" text
         # Generate the ASCII art representation of the PAC value using Figlet
-        day_energy = pac_value
-
+        #day_energy = pac_value
+        day_energy = int(pac_value)  # Convert to float if pac_value is a string, possibly fix error when pavalue isnt a number and cant add ',' separator
         day_ascii = figlet.renderText("{:,}".format(day_energy) + " W")
         lines = day_ascii.split("\n")
         max_line_length = max(len(line) for line in lines)
