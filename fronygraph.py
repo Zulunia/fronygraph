@@ -58,7 +58,7 @@ while True:
     if len(pac_history) > history_size:
         pac_history = pac_history[-history_size:]
 
-    if int(pac_value) is not None and not is_sleeping:
+    if float(pac_value) is not None and not is_sleeping:
         # Scale the PAC values to fit within the y-axis height
         scaled_values = [int(value / max_y_value * y_axis_height) for value in pac_history]
 
