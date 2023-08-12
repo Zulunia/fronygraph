@@ -57,11 +57,15 @@ while True:
     # Truncate the history list if it exceeds the desired size
     if len(pac_history) > history_size:
         pac_history = pac_history[-history_size:]
+    
+    # Clean the history list of any string '0' values that sneak in
+    while '0' in pac_history:
+        pac_history.remove('0')
 
-    if int(pac_value) is not None and pac_value !=0 and not is_sleeping:
+    if int(pac_value) is not None and pac_value != '0' and not is_sleeping: 
         # Scale the PAC values to fit within the y-axis height
         
-        scaled_values = [(value / max_y_value * y_axis_height) for value in pac_history]   #is it a 0/ issue?
+        scaled_values = [(value / max_y_value * y_axis_height) for value in pac_history]   # seems to be a '0' getting in the array
 
     # Clear the console screen
     print("\033c", end="")
