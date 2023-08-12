@@ -58,13 +58,29 @@ while True:
     if len(pac_history) > history_size:
         pac_history = pac_history[-history_size:]
 
-    if float(pac_value) is not None and not is_sleeping:
+    if int(pac_value) is not None and pac_value !=0 and not is_sleeping:
         # Scale the PAC values to fit within the y-axis height
-        scaled_values = [int(value / max_y_value * y_axis_height) for value in pac_history]
+        
+        scaled_values = [(value / max_y_value * y_axis_height) for value in pac_history]   #is it a 0/ issue?
 
     # Clear the console screen
     print("\033c", end="")
+    if pac_value is None or pac_value == 0:  # if error or api unavailable  # duplicated for debug
+        # Set text color to flashing red
+        flashing_red = "\u001b[5;91m"
+        reset_color = "\u001b[0m"
 
+        # Print centered and flashing "OFFLINE" text in red
+        offline_line = figlet.renderText("OFFLINE")
+        centered_offline_line = offline_line.rstrip().center(x_axis_length)
+        print(f"{flashing_red}{centered_offline_line}{reset_color}")
+
+        # Output hrule
+        print('─' * x_axis_length, '\n')
+
+        # Output the time when pac_value was None
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"\n\nContact lost: {current_time}")
 
     if is_sleeping and pac_value is not None: # If sleeping just show daily energy and no graph (for now)
         # Set text color to light blue
