@@ -39,6 +39,7 @@ x_axis_length = history_size
 
 # Create an empty list to store PAC values
 pac_history = []
+history_fix = 0
 
 # Configure Figlet with the "banner" font
 figlet = Figlet(font="banner")
@@ -61,6 +62,7 @@ while True:
     # Clean the history list of any string '0' values that sneak in
     while '0' in pac_history:
         pac_history.remove('0')
+        history_fix = history_fix + 1
 
     if int(pac_value) is not None and pac_value != '0' and not is_sleeping: 
         # Scale the PAC values to fit within the y-axis height
@@ -143,6 +145,9 @@ while True:
 
         # Output the x-axis
         print('─' * x_axis_length, '\n')
+
+        # Debug - print tally of history cleanses
+        print(f"history fix = {history_fix}")
 
         # Generate the ASCII art representation of the PAC value using Figlet
         pac_ascii = figlet.renderText("{:,}".format(pac_value) + " W")
