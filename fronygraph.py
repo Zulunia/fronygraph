@@ -32,7 +32,7 @@ def get_pac_value(api_url):
         return None, True
 
 # enable debugging
-debug = True
+debug = False
 
 # Define the number of datapoints to display, the height and width of the graph
 history_size = 64  # same as x-axis size
@@ -91,6 +91,9 @@ while True:
 
             disconnect_time_output = True # set flag to true to indicate first discoonect time being used
             # Sleep for a while before checking again (optional)
+        else:
+            # Exit loop when pac_value shows unit is online
+            break
 
         time.sleep(update_interval)
 
@@ -161,7 +164,8 @@ while True:
         print('─' * x_axis_length, '\n')
 
         # Debug - print tally of history cleanses
-        print(f"history fix = {history_fix}")
+        if debug:
+            print(f"history fix = {history_fix}")
 
         # Generate the ASCII art representation of the PAC value using Figlet
         pac_ascii = figlet.renderText("{:,}".format(pac_value) + " W")
